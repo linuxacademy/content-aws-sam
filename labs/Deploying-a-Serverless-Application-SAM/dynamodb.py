@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
-"""This script seeds the 'friends' DynamoDB table with data"""
+"""This script seeds the DynamoDB table with data"""
 
 from time import sleep
 
 import boto3
 from botocore.exceptions import ClientError
 
-TABLE_NAME = "friends"
+TABLE_NAME = "DYNAMODB TABLE NAME HERE"
 
 
 def wait_for_table_active():

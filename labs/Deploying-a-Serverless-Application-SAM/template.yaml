@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: ??? <-------- FILL THIS VALUE IN
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: ??? <----------------- FILL THIS VALUE IN
+      PolicyDocument:
+        Id: PublicReadPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub arn:aws:s3:::${S3Bucket}/*
+
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Environment:
+        Variables:
+          TABLE_NAME: ??? <-------- FILL THIS VALUE IN
+      Events:
+        ApiEvent:
+          Type: ??? <-------------- FILL THIS VALUE IN
+      Handler: index.lambda_handler
+      InlineCode: |
+        import os
+        import boto3
+        table_name = os.environ["TABLE_NAME"]
+        table = boto3.resource("dynamodb").Table(table_name)
+        def lambda_handler(event, context):
+            items = table.scan()["Items"]
+            return {
+                "friends": items,
+            }
+      Policies:
+      - AmazonDynamoDBFullAccess
+      Runtime: python3.7
+
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: N
+        - AttributeName: name
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+        - AttributeName: name
+          KeyType: RANGE
+
+Outputs:
+  S3BucketSecureURL:
+    Value: !Sub https://${S3Bucket.DomainName}
+    Description: Name of S3 bucket to hold website content
+  WebsiteURL:
+    Value: !GetAtt S3Bucket.WebsiteURL
+    Description: URL for website hosted on S3
