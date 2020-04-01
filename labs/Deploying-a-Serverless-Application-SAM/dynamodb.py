@@ -2,31 +2,32 @@
 
 """This script seeds the DynamoDB table with data"""
 
+import sys
 from time import sleep
 
 import boto3
 from botocore.exceptions import ClientError
 
-TABLE_NAME = "DYNAMODB TABLE NAME HERE"
+table_name = ""
 
 
 def wait_for_table_active():
     client = boto3.client("dynamodb")
-    print(f"Waiting for table {TABLE_NAME} to finish creating...")
+    print(f"Waiting for table {table_name} to finish creating...")
     waiter = client.get_waiter("table_exists")
-    waiter.wait(TableName=TABLE_NAME)
+    waiter.wait(TableName=table_name)
     active = False
     while not active:
-        table_description = client.describe_table(TableName=TABLE_NAME)
-        print(f"Waiting for DynamoDB table {TABLE_NAME} to become active...")
+        table_description = client.describe_table(TableName=table_name)
+        print(f"Waiting for DynamoDB table {table_name} to become active...")
         current_status = table_description["Table"]["TableStatus"]
         active = current_status == "ACTIVE"
         sleep(1)
 
 
 def seed_data():
-    print(f"Seeding {TABLE_NAME} table...")
-    table = boto3.resource("dynamodb").Table(TABLE_NAME)
+    print(f"Seeding {table_name} table...")
+    table = boto3.resource("dynamodb").Table(table_name)
     try:
         with table.batch_writer() as batch:
             batch.put_item(Item={"id": 1, "name": "Paquito Pinhorn"})
@@ -45,6 +46,10 @@ def seed_data():
 
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: dynamodb.py <table name>")
+        exit(1)
+    table_name = sys.argv[1]
     wait_for_table_active()
     seed_data()
     print("Done.")

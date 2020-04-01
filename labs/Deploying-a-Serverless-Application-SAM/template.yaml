@@ -1,3 +1,4 @@
+
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
@@ -24,6 +25,14 @@ Resources:
             Action: 's3:GetObject'
             Resource: !Sub arn:aws:s3:::${S3Bucket}/*
 
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - '*'
+      StageName: $default
+
   ApiFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -31,8 +40,12 @@ Resources:
         Variables:
           TABLE_NAME: ??? <-------- FILL THIS VALUE IN
       Events:
-        ApiEvent:
-          Type: ??? <-------------- FILL THIS VALUE IN
+        Get:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: GET
+            ApiId: ??? <----------- FILL THIS VALUE IN
       Handler: index.lambda_handler
       InlineCode: |
         import os
@@ -64,9 +77,16 @@ Resources:
           KeyType: RANGE
 
 Outputs:
-  S3BucketSecureURL:
-    Value: !Sub https://${S3Bucket.DomainName}
-    Description: Name of S3 bucket to hold website content
+  ApiUrl:
+    Description: HTTP API invoke URL
+    Value: !Sub "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  DynamoDBTable:
+    Description: DynamoDB Table
+    Value: !Ref DynamoDBTable
+  S3Bucket:
+    Description: S3 bucket
+    Value: !Ref S3Bucket
   WebsiteURL:
+    Description: Static website URL
     Value: !GetAtt S3Bucket.WebsiteURL
-    Description: URL for website hosted on S3
+

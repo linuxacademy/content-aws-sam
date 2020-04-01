@@ -1,21 +1,19 @@
-const invokeUrl = 'https://e5bleetjji.execute-api.us-east-1.amazonaws.com';
-
-const endpoint = invokeUrl + "/HttpApi";
+const invokeUrl = 'https://9fz7s6nsi8.execute-api.us-east-1.amazonaws.com';
 
 // Do not edit below this line
 
 var app = new Vue({
   el: '#app',
-  data () {
+  data() {
     return {
       loading: true,
       errored: false,
       friends: null
     }
   },
-  mounted () {
+  mounted() {
     axios
-      .get(endpoint)
+      .get(invokeUrl)
       .then(response => {
         console.log(response)
         this.friends = response.data.friends

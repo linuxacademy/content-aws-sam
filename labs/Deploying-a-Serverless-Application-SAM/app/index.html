@@ -20,14 +20,18 @@
     <div v-else>
       <div v-if="loading" class="alert alert-primary" role="alert">Loading...</div>
       <div v-else>
-        <ul id="friends" class="list-group"></ul>
-        <li v-for="friend in friends" class="list-group-item">
-          <img :src="'/img/' + friend.id + '.jpg'">
-          <span>{{ friend.name }}</span>
-        </li>
+        <ul id="friends" class="list-group">
+          <div v-if="!friends.length" class="alert alert-danger" role="alert">
+            You have no friends. Did you seed your DynamoDB table with data?
+          </div>
+          <li v-for="friend in friends" class="list-group-item">
+            <img :src="'/img/' + friend.id + '.jpg'">
+            <span>{{ friend.name }}</span>
+          </li>
+        </ul>
       </div>
     </div>
-    
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
