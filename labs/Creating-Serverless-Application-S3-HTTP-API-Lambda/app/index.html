@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <title>Hands-on Lab: Creating a Serverless Application Using S3, HTTP API, and Lambda</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div id="app" class="container" v-cloak>
+    <h1>Friends</h1>
+    <div v-if="errored" class="alert alert-danger" role="alert">
+      Could not connect to HTTP API endpoint. Please check your endpoint configuration and invoke URL in app.js.
+    </div>
+    <div v-else>
+      <div v-if="loading" class="alert alert-primary" role="alert">Loading...</div>
+      <div v-else>
+        <ul id="friends" class="list-group">
+          <div v-if="!friends.length" class="alert alert-danger" role="alert">
+            You have no friends. Did you seed your DynamoDB table with data?
+          </div>
+          <li v-for="friend in friends" class="list-group-item">
+            <img :src="'/img/' + friend.id + '.jpg'">
+            <span>{{ friend.name }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="app.js"></script>
+
+</body>
+
+</html>
