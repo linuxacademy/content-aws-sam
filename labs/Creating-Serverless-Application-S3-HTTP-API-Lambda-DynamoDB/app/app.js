@@ -1,4 +1,4 @@
-const invokeUrl = 'https://XXXXXXXXXX.execute-api.us-east-1.amazonaws.com';
+const invokeUrl = 'https://XXXXXXXXXX.execute-api.us-east-1.amazonaws.com/GetFriends';
 
 // Do not edit below this line
 
