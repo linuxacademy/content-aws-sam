@@ -1,0 +1,34 @@
+
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: Use CodeDeploy to gradually shift traffic to a newly deployed version
+
+Resources:
+
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: $default
+
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      AutoPublishAlias: live
+      CodeUri: src/
+      DeploymentPreference:
+        Type: Linear10PercentEvery1Minute
+      Events:
+        Get:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: GET
+            ApiId: !Ref HttpApi
+      Handler: index.lambda_handler
+      Runtime: python3.7
+
+Outputs:
+  ApiUrl:
+    Description: HTTP API invoke URL
+    Value: !Sub "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com"
