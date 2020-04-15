@@ -1,11 +1,9 @@
-
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
 Description: Use CodeDeploy to gradually shift traffic to a newly deployed version
 
 Resources:
-
   HttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
@@ -17,7 +15,16 @@ Resources:
       AutoPublishAlias: live
       CodeUri: src/
       DeploymentPreference:
-        Type: Linear10PercentEvery1Minute
+        # AllAtOnce
+        # Canary10Percent30Minutes
+        # Canary10Percent5Minutes
+        # Canary10Percent10Minutes
+        # Canary10Percent15Minutes
+        # Linear10PercentEvery10Minutes
+        # Linear10PercentEvery1Minute
+        # Linear10PercentEvery2Minutes
+        # Linear10PercentEvery3Minutes
+        Type: ??? <--------------------- FILL THIS IN
       Events:
         Get:
           Type: HttpApi
@@ -26,9 +33,12 @@ Resources:
             Method: GET
             ApiId: !Ref HttpApi
       Handler: index.lambda_handler
-      Runtime: python3.7
+      Runtime: python3.8
 
 Outputs:
   ApiUrl:
     Description: HTTP API invoke URL
-    Value: !Sub "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com'
+  LambdaFunction:
+    Description: Lambda Function name
+    Value: !Ref ApiFunction
