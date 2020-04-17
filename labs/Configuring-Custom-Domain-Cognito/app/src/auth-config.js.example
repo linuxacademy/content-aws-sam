@@ -1,0 +1,14 @@
+export default {
+  AuthConfig: {
+    region: 'us-east-1',
+    userPoolId: 'YOUR COGNITO USER POOL ID',
+    userPoolWebClientId: 'YOUR COGNITO APP CLIENT ID',
+    oauth: {
+      domain: 'YOUR COGNITO DOMAIN NAME',
+      scope: ['email', 'profile', 'openid'],
+      redirectSignIn: 'http://localhost:8080/',
+      redirectSignOut: 'http://localhost:8080/',
+      responseType: 'code'
+    }
+  }
+}
