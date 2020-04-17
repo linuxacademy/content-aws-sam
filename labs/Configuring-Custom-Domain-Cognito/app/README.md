@@ -8,7 +8,7 @@ npm install
 
 ### Customize Cognito configuration
 
-Edit `public/js/auth-config.js`
+Edit `auth-config.js`
 
 ### Compiles and minifies for production
 
