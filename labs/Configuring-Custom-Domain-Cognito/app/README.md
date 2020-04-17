@@ -1,4 +1,4 @@
-# cognito-lab
+# Configuring a Custom Domain with Amazon Cognito
 
 ## Project setup
 
