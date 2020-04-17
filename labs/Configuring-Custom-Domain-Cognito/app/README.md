@@ -8,9 +8,9 @@ npm install
 
 ### Customize Cognito configuration
 
-Edit `auth-config.js`
+Rename `src/auth-config.js.example` to `src/auth-config.js` and enter your Cognito configuration.
 
-### Compiles and minifies for production
+### Compile and minify for production
 
 ```sh
 npm run build
