@@ -8,15 +8,25 @@ import { BootstrapVue } from 'bootstrap-vue'
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
-console.log("Importing auth-config.js")
-import AuthConfig from "./auth-config"
-
 Vue.use(AmplifyPlugin, AmplifyModules)
 Vue.use(BootstrapVue)
 
 Vue.config.productionTip = false
 
-Amplify.configure({ Auth: AuthConfig });
+Amplify.configure({
+  Auth: {
+    region: 'us-east-1',
+    userPoolId: '',
+    userPoolWebClientId: '',
+    oauth: {
+      domain: '',
+      scope: ['email', 'profile', 'openid'],
+      redirectSignIn: 'https://www.',
+      redirectSignOut: 'https://www.',
+      responseType: 'code'
+    }
+  }
+});
 
 new Vue({
   router,
