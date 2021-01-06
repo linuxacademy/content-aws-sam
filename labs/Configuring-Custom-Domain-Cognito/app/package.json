@@ -9,7 +9,7 @@
   "dependencies": {
     "aws-amplify": "^3.0.8",
     "aws-amplify-vue": "^2.1.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.11.0",
     "vue": "^2.6.11",
